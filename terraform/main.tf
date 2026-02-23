@@ -13,7 +13,6 @@ provider "azurerm" {
   features {}
 }
 
-# Resource Group - logical container for Azure resources
 resource "azurerm_resource_group" "main" {
   name     = var.resource_group_name
   location = var.location
@@ -25,7 +24,6 @@ resource "azurerm_resource_group" "main" {
   }
 }
 
-# Container Registry - stores Docker images
 resource "azurerm_container_registry" "acr" {
   name                = "weatherdashboardacr${random_string.suffix.result}"
   resource_group_name = azurerm_resource_group.main.name
@@ -39,14 +37,12 @@ resource "azurerm_container_registry" "acr" {
   }
 }
 
-# Random suffix for unique naming
 resource "random_string" "suffix" {
   length  = 8
   special = false
   upper   = false
 }
 
-# Container Instance - runs the Docker container
 resource "azurerm_container_group" "main" {
   name                = var.container_name
   location            = azurerm_resource_group.main.location
